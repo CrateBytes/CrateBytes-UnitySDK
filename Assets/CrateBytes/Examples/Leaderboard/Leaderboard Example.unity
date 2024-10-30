@@ -1279,13 +1279,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: CrateBytesManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7932748731493626760, guid: 6200e17dd274e674fad717f4604b3660, type: 3}
-      propertyPath: ApiUrl
-      value: http://localhost:5173
-      objectReference: {fileID: 0}
-    - target: {fileID: 7932748731493626760, guid: 6200e17dd274e674fad717f4604b3660, type: 3}
-      propertyPath: ProjectKey
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6200e17dd274e674fad717f4604b3660, type: 3}

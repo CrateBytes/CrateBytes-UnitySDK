@@ -55,13 +55,16 @@ namespace CrateBytes {
 
             if (!string.IsNullOrEmpty(playerId)) request.playerId = playerId;
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/guestLogin", request.ToString(), (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/platform/guest", request.ToString(), (response) => {
                 try {
-                    GuestLoginResponse guestLoginResponse = JsonUtility.FromJson<GuestLoginResponse>(response);
-                    token = guestLoginResponse.token;
-                    callback?.Invoke(guestLoginResponse);
+                    APIResponse<GuestLoginResponse> res = JsonUtility.FromJson<APIResponse<GuestLoginResponse>>(response);
+                    if (!string.IsNullOrEmpty(res.error)) {
+                        throw new System.Exception(res.error);
+                    }
+
+                    token = res.data.token;
+                    callback?.Invoke(res.data);
                 } catch (System.Exception) {
-                    Debug.LogError("CrateBytes: Guest login failed.");
                     throw new System.Exception("CrateBytes: Guest login failed.");
                 }
             }));
@@ -78,11 +81,15 @@ namespace CrateBytes {
                 steamAuthTicket = steamAuthTicket,
             };
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/steamLogin", request.ToString(), (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/platform/steam", request.ToString(), (response) => {
                 try {
-                    SteamLoginResponse steamLoginResponse = JsonUtility.FromJson<SteamLoginResponse>(response);
-                    token = steamLoginResponse.token;
-                    callback?.Invoke(steamLoginResponse);
+                    APIResponse<SteamLoginResponse> res = JsonUtility.FromJson<APIResponse<SteamLoginResponse>>(response);
+                    if (!string.IsNullOrEmpty(res.error)) {
+                        throw new System.Exception(res.error);
+                    }
+
+                    token = res.data.token;
+                    callback?.Invoke(res.data);
                 } catch (System.Exception) {
                     Debug.LogError("CrateBytes: Steam login failed.");
                     throw new System.Exception("CrateBytes: Steam login failed.");
@@ -103,7 +110,7 @@ namespace CrateBytes {
                 throw new System.Exception("CrateBytes: Token is not set. Please login first.");
             }
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/game/session/start", "", (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/game/gameplay/start", "", (response) => {
                 callback?.Invoke(response);
             }, token));
         }
@@ -118,7 +125,7 @@ namespace CrateBytes {
                 throw new System.Exception("CrateBytes: Token is not set. Please login first.");
             }
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/game/session/heartbeat", "", (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/game/gameplay/heartbeat", "", (response) => {
                 callback?.Invoke(response);
             }, token));
         }
@@ -133,7 +140,7 @@ namespace CrateBytes {
                 throw new System.Exception("CrateBytes: Token is not set. Please login first.");
             }
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/game/session/end", "", (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/game/gameplay/end", "", (response) => {
                 callback?.Invoke(response);
             }, token));
         }
@@ -176,8 +183,12 @@ namespace CrateBytes {
 
             StartCoroutine(GetRequest(ApiUrl + $"/api/leaderboards/{leaderboardId}?page={page}", (response) => {
                 try {
-                    LeaderboardResponse leaderboardResponse = JsonUtility.FromJson<LeaderboardResponse>(response);
-                    callback?.Invoke(leaderboardResponse);
+                    APIResponse<LeaderboardResponse> res = JsonUtility.FromJson<APIResponse<LeaderboardResponse>>(response);
+                    if (!string.IsNullOrEmpty(res.error)) {
+                        throw new System.Exception(res.error);
+                    }
+                    
+                    callback?.Invoke(res.data);
                 } catch (System.Exception) {
                     Debug.LogError("CrateBytes: Get leaderboard failed.");
                     throw new System.Exception("CrateBytes: Get leaderboard failed.");
@@ -200,8 +211,12 @@ namespace CrateBytes {
 
             StartCoroutine(GetRequest(ApiUrl + "/api/game/metadata/get", (response) => {
                 try {
-                    GetMetadataResponse getMetadataResponse = JsonUtility.FromJson<GetMetadataResponse>(response);
-                    callback?.Invoke(getMetadataResponse);
+                    APIResponse<GetMetadataResponse> res = JsonUtility.FromJson<APIResponse<GetMetadataResponse>>(response);
+                    if (!string.IsNullOrEmpty(res.error)) {
+                        throw new System.Exception(res.error);
+                    }
+
+                    callback?.Invoke(res.data);
                 } catch (System.Exception) {
                     Debug.LogError("CrateBytes: Get metadata failed.");
                     throw new System.Exception("CrateBytes: Get metadata failed.");
@@ -226,8 +241,12 @@ namespace CrateBytes {
             
             StartCoroutine(PutRequest(ApiUrl + "/api/game/metadata/add", request.ToString(), (response) => {
                 try {
-                    AddUpdateMetadataResponse addUpdateMetadataResponse = JsonUtility.FromJson<AddUpdateMetadataResponse>(response);
-                    callback?.Invoke(addUpdateMetadataResponse);
+                    APIResponse<AddUpdateMetadataResponse> res = JsonUtility.FromJson<APIResponse<AddUpdateMetadataResponse>>(response);
+                    if (!string.IsNullOrEmpty(res.error)) {
+                        throw new System.Exception(res.error);
+                    }
+
+                    callback?.Invoke(res.data);
                 } catch (System.Exception) {
                     Debug.LogError("CrateBytes: Add/Update metadata failed.");
                     throw new System.Exception("CrateBytes: Add/Update metadata failed.");
@@ -257,8 +276,6 @@ namespace CrateBytes {
         /// Sends a GET request.
         /// </summary>
         private IEnumerator GetRequest(string uri, System.Action<string> callback, string bearerToken = null) {
-            Debug.Log(uri);
-
             using (UnityEngine.Networking.UnityWebRequest webRequest = UnityEngine.Networking.UnityWebRequest.Get(uri)) {
                 if (!string.IsNullOrEmpty(bearerToken)) webRequest.SetRequestHeader("Authorization", "Bearer " + bearerToken);
                 yield return webRequest.SendWebRequest();

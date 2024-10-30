@@ -2,16 +2,24 @@ using System;
 
 namespace CrateBytes {
 
+    public class APIResponse<T> {
+        public int status;
+        public string error;
+        public T data;
+    }
+
     [Serializable]
     public struct Player {
         public bool guest;
         public string playerId;
-        public string PlayerCustomData;
+        public string entryData;
     }
 
     [Serializable]
     public struct Leaderboard {
         public string id;
+        public string name;
+        public string description;
     }
 
     #region Guest Authentication
@@ -80,10 +88,12 @@ namespace CrateBytes {
     #endregion
 
     #region Metadata
+    [Serializable]
     public struct GetMetadataResponse {
         public string data;
     }
 
+    [Serializable]
     public struct AddUpdateMetadataRequest {
         public string data;
 
@@ -92,6 +102,7 @@ namespace CrateBytes {
         }
     }
 
+    [Serializable]
     public struct AddUpdateMetadataResponse {
         public string data;
     }
