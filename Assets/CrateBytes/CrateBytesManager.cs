@@ -55,11 +55,11 @@ namespace CrateBytes {
 
             if (!string.IsNullOrEmpty(playerId)) request.playerId = playerId;
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/platform/guest", request.ToString(), (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/game/platform/guest", request.ToString(), (response) => {
                 try {
                     APIResponse<GuestLoginResponse> res = JsonUtility.FromJson<APIResponse<GuestLoginResponse>>(response);
-                    if (!string.IsNullOrEmpty(res.error)) {
-                        throw new System.Exception(res.error);
+                    if (res.statusCode != 200) {
+                        throw new System.Exception(res.error.message);
                     }
 
                     token = res.data.token;
@@ -81,11 +81,11 @@ namespace CrateBytes {
                 steamAuthTicket = steamAuthTicket,
             };
 
-            StartCoroutine(PostRequest(ApiUrl + "/api/platform/steam", request.ToString(), (response) => {
+            StartCoroutine(PostRequest(ApiUrl + "/api/game/platform/steam", request.ToString(), (response) => {
                 try {
                     APIResponse<SteamLoginResponse> res = JsonUtility.FromJson<APIResponse<SteamLoginResponse>>(response);
-                    if (!string.IsNullOrEmpty(res.error)) {
-                        throw new System.Exception(res.error);
+                    if (res.statusCode != 200) {
+                        throw new System.Exception(res.error.message);
                     }
 
                     token = res.data.token;
@@ -181,11 +181,11 @@ namespace CrateBytes {
                 throw new System.Exception("CrateBytes: Token is not set. Please login first.");
             }
 
-            StartCoroutine(GetRequest(ApiUrl + $"/api/leaderboards/{leaderboardId}?page={page}", (response) => {
+            StartCoroutine(GetRequest(ApiUrl + $"/api/game/leaderboards/{leaderboardId}?page={page}", (response) => {
                 try {
                     APIResponse<LeaderboardResponse> res = JsonUtility.FromJson<APIResponse<LeaderboardResponse>>(response);
-                    if (!string.IsNullOrEmpty(res.error)) {
-                        throw new System.Exception(res.error);
+                    if (res.statusCode != 200) {
+                        throw new System.Exception(res.error.message);
                     }
                     
                     callback?.Invoke(res.data);
@@ -212,8 +212,8 @@ namespace CrateBytes {
             StartCoroutine(GetRequest(ApiUrl + "/api/game/metadata/get", (response) => {
                 try {
                     APIResponse<GetMetadataResponse> res = JsonUtility.FromJson<APIResponse<GetMetadataResponse>>(response);
-                    if (!string.IsNullOrEmpty(res.error)) {
-                        throw new System.Exception(res.error);
+                    if (res.statusCode != 200) {
+                        throw new System.Exception(res.error.message);
                     }
 
                     callback?.Invoke(res.data);
@@ -242,8 +242,8 @@ namespace CrateBytes {
             StartCoroutine(PutRequest(ApiUrl + "/api/game/metadata/add", request.ToString(), (response) => {
                 try {
                     APIResponse<AddUpdateMetadataResponse> res = JsonUtility.FromJson<APIResponse<AddUpdateMetadataResponse>>(response);
-                    if (!string.IsNullOrEmpty(res.error)) {
-                        throw new System.Exception(res.error);
+                    if (res.statusCode != 200) {
+                        throw new System.Exception(res.error.message);
                     }
 
                     callback?.Invoke(res.data);

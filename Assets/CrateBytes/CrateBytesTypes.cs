@@ -3,9 +3,14 @@ using System;
 namespace CrateBytes {
 
     public class APIResponse<T> {
-        public int status;
-        public string error;
+        public int statusCode;
+        public APIError error;
         public T data;
+    }
+
+    [Serializable]
+    public struct APIError {
+        public string message;
     }
 
     [Serializable]
