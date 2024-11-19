@@ -10,7 +10,7 @@ namespace CrateBytes
     {
 
         //TODO: Remove to a configurable object and reference it through
-        private static string projectKey = "cm2w95j0f0000julzpuvfm8ou-Rb7Ughy4vxF5jDiE";
+        private static string projectKey = "";
 
         #region Authentication
 
