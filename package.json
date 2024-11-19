@@ -1,0 +1,16 @@
+{
+    "name":"com.cratebytes.unitysdk",
+    "version":"0.0.1",
+    "displayName": "CrateBytes",
+    "description": "CrateBytes is an open-source backend solution for games, offering a seamless, self-hosted alternative to AccelByte and other platforms.",
+    "type": "tool",
+    "documentationUrl": "https://docs.cratebytes.com/getting-started/introduction",
+    "author": {
+        "name": "CrateBytes",
+        "email": "hello@cratebytes.com",
+        "url": "https://cratebytes.com"
+    },
+    "dependencies": {
+        "com.unity.nuget.newtonsoft-json":"3.2.1"
+    }
+}
