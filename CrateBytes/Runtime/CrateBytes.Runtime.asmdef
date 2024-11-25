@@ -1,3 +1,16 @@
 {
-	"name": "CrateBytes.Runtime"
+    "name": "CrateBytes.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:edd1b0da89a751a45b2a1c8e14f187c5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

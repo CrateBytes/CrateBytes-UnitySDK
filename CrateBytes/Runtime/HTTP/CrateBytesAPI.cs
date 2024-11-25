@@ -8,21 +8,22 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 
-namespace CrateBytes.Net
+namespace CrateBytes
 {
     public static class CrateBytesAPI
     {
         public static HttpClient client = new HttpClient();
 
-        public static string domainURL = "https://cratebytes.com/api/game/";
-
         private static string contentType = "application/json";
         private static Encoding encoding = Encoding.UTF8;
 
-        public static async Task<T> CallAPI<T>(string endpoint, HttpMethod httpMethod, string jsonString = null, Dictionary<string, string> headers = null) where T : BaseResponse
+        public static async Task<T> CallAPI<T>(string endpoint, HttpMethod httpMethod, string jsonString = null, Dictionary<string, string> headers = null) where T : BaseResponse, new()
         {
             try
             {
+
+                var settings = CrateBytesSettingsBootstrap.Instance;
+
                 var request = new HttpRequestMessage();
 
                 request.Method = httpMethod;
@@ -40,7 +41,7 @@ namespace CrateBytes.Net
                     }
                 }
 
-                request.RequestUri = new Uri(domainURL + endpoint);
+                request.RequestUri = new Uri(settings.DomainURL + endpoint);
 
                 HttpResponseMessage httpResponse = client.SendAsync(request).Result;
 
@@ -70,10 +71,45 @@ namespace CrateBytes.Net
                     return returnResponse;
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                Debug.LogError($"HTTP Request failed: {ex.Message}");
+                var exception = new CrateBytesError
+                {
+                    message = $"HTTP Request failed: {ex.Message}"
+                };
+
+                return new T { error = exception };
+            }
+            catch (JsonException ex)
+            {
+                Debug.LogError($"JSON Parsing failed: {ex.Message}");
+                var exception = new CrateBytesError
+                {
+                    message = $"JSON Parsing failed: {ex.Message}"
+                };
+
+                return new T { error = exception };
+            }
+            catch (TaskCanceledException ex)
+            {
+                Debug.LogError($"Request timeout or task canceled: {ex.Message}");
+                var exception = new CrateBytesError
+                {
+                    message = $"Request timeout or task canceled: {ex.Message}"
+                };
+
+                return new T { error = exception };
+            }
             catch (Exception ex)
             {
-                Debug.LogError("Exception: " + ex.Message);
-                return null;
+                Debug.LogError($"Unexpected error: {ex.Message}");
+                var exception = new CrateBytesError
+                {
+                    message = $"Unexpected error: {ex.Message}"
+                };
+
+                return new T { error = exception };
             }
         }
 
