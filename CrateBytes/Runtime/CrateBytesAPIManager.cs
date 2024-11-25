@@ -1,4 +1,3 @@
-using CrateBytes.Net;
 using System.Threading.Tasks;
 using UnityEngine;
 using Newtonsoft.Json;
@@ -8,9 +7,6 @@ namespace CrateBytes
 {
     public class CrateBytesAPIManager
     {
-
-        //TODO: Remove to a configurable object and reference it through
-        private static string projectKey = "";
 
         #region Authentication
 
@@ -36,18 +32,28 @@ namespace CrateBytes
 
             var request = new GuestSessionRequest()
             {
-                projectKey = projectKey,
+                projectKey = CrateBytesSettingsBootstrap.Instance.ProjectKey,
             };
 
-            if (PlayerPrefs.GetString("CrateBytes_PlayerID", "") != "" || !string.IsNullOrEmpty(playerID))
+            var cached_playerID = PlayerPrefs.GetString("CrateBytes_PlayerID", "");
+
+            if (!string.IsNullOrEmpty(playerID))
             {
-                Debug.Log("Got stored player");
                 request.playerId = playerID;
+            } 
+            else if (cached_playerID != "")
+            {
+                request.playerId = cached_playerID;
             }
 
             string stringRequest = JsonConvert.SerializeObject(request);
 
             var response = await CrateBytesAPI.CallAPI<DataResponse<GuestSessionResponse>>(endPoint.endPoint, endPoint.method, stringRequest);
+
+            if (response == null)
+            {
+                return null;
+            }
 
             if (response.statusCode == 200)
             {
@@ -76,7 +82,7 @@ namespace CrateBytes
 
             var request = new SteamSessionRequest()
             {
-                projectKey = projectKey,
+                projectKey = CrateBytesSettingsBootstrap.Instance.ProjectKey,
                 steamAuthTicket = authToken
             };
 
