@@ -27,7 +27,7 @@ public class CrateBytesProjectSettings : ScriptableObject
         {
             if (string.IsNullOrEmpty(domainURL))
             {
-                Debug.LogError("Project Key is not set!");
+                Debug.LogError("No domain url set");
             }
             return domainURL;
         }
