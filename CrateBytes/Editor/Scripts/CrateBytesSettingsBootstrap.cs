@@ -12,6 +12,7 @@ namespace CrateBytes
         private static readonly string assetPath = "Assets/CrateBytes/Resources/CrateBytesProjectSettings.asset";
         private static readonly string directoryPath = "Assets/CrateBytes/Resources/";
 
+        #if UNITY_EDITOR
         [InitializeOnLoadMethod]
         static void CreateSettingsFile()
         {
@@ -19,30 +20,31 @@ namespace CrateBytes
             {
                 Directory.CreateDirectory(directoryPath);
             }
-
+        
             if (!AssetExists(assetPath))
             {
                 CreateScriptableObject<CrateBytesProjectSettings>(assetPath);
             }
         }
-
+        
         private static bool AssetExists(string path)
         {
             return AssetDatabase.LoadAssetAtPath<ScriptableObject>(path) != null;
         }
-
+        
         private static void CreateScriptableObject<T>(string path) where T : ScriptableObject
         {
             // Create a new instance of the ScriptableObject
             T newAsset = ScriptableObject.CreateInstance<T>();
-
+        
             // Save it to the specified path
             AssetDatabase.CreateAsset(newAsset, path);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-
+        
             Debug.Log($"ScriptableObject of type {typeof(T).Name} created at path: {path}");
         }
+        #endif
 
         public static CrateBytesProjectSettings Instance
         {
