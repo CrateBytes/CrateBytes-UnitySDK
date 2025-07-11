@@ -1,0 +1,17 @@
+{
+    "name": "CrateBytes",
+    "rootNamespace": "CrateBytes",
+    "references": [
+        "UnityEngine.Networking",
+        "Newtonsoft.Json"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+} 
