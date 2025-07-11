@@ -4,9 +4,7 @@
     "displayName": "CrateBytes SDK",
     "description": "CrateBytes Unity SDK - A comprehensive backend solution for games, offering authentication, session management, leaderboards, and player metadata functionality.",
     "type": "tool",
-    "documentationUrl": "https://docs.cratebytes.com/getting-started/introduction",
-    "changelogUrl": "https://docs.cratebytes.com/changelog",
-    "licensesUrl": "https://cratebytes.com/license",
+    "documentationUrl": "https://docs.cratebytes.com/",
     "keywords": [
         "backend",
         "authentication",
@@ -22,12 +20,5 @@
     },
     "dependencies": {
         "com.unity.nuget.newtonsoft-json":"3.2.1"
-    },
-    "samples": [
-        {
-            "displayName": "Basic Integration Example",
-            "description": "Shows how to integrate the CrateBytes SDK into your Unity project",
-            "path": "Samples~/BasicIntegration"
-        }
-    ]
+    }
 }
